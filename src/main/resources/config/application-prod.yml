@@ -1,0 +1,67 @@
+## ===================================================================
+## Spring Boot configuration.
+##
+## This configuration will be overridden by the Spring profile you use
+## For example: application-dev.yml if you use the "dev" profile.
+## ===================================================================
+#
+## ===================================================================
+## Standard Spring Boot properties.
+## Full reference is available at:
+## https://docs.spring.io/spring-boot/reference/features/profiles.html
+## ===================================================================
+#
+#logging:
+#  level:
+#    root: info
+#    com.ars.configserver: info
+#  charset:
+#    console: UTF-8
+#    file: UTF-8
+#  # Custom properties to define logs file paths according to different profiles
+#  file-path: /mnt/logs
+#
+#spring:
+#  cloud:
+#    # Declare how to connect to the HashiCorp Vault Server external
+#    vault:
+#      uri: http://localhost:8200
+#      authentication: token
+#      token: ${VAULT_TOKEN}
+#      kv:
+#        enabled: true
+#        # You will manage the key-value at /secret in the Vault UI
+#        backend: secret
+#        # This is the default context name if spring.application.name is not provided.
+#        # For example, if the client app does not send a specific application name
+#        # Vault will attempt to retrieve the configuration from folder: /secret/application/
+#        default-context: application
+#        # Used to combine context + profile into Vault path to query secret.
+#        # For example if: application name = config-client, profile = dev, profile-separator = '-'
+#        # Then Spring will look for secret at the following paths (in order of priority):
+#        # /secret/config-client-dev
+#        # /secret/config-client
+#        # /secret/application-dev
+#        # /secret/application
+#        profile-separator: '-'
+#
+#    config:
+#      server:
+#        git:
+#          uri: https://github.com/thoaidc/ars-config-server.git
+#          search-paths:
+#            - config
+#          default-label: main
+#          clone-on-start: true
+#
+#        # Specifies which configuration to retrieve from Vault to return to the client
+#        # Only works if spring.cloud.vault config above has successfully connected
+#        vault:
+#          backend: ${spring.cloud.vault.kv.backend}
+#          defaultKey: ${spring.cloud.vault.kv.default-context}
+#          profileSeparator: ${spring.cloud.vault.kv.profile-separator}
+#          kv-version: 2
+#          skip-ssl-validation: true
+#
+#        encrypt:
+#          enabled: true
