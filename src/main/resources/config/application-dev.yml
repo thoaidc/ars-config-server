@@ -26,67 +26,41 @@ logging:
   file-path: mnt/logs
 
 spring:
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
   cloud:
     # Declare how to connect to the HashiCorp Vault Server external
-#    vault:
-#      uri: http://localhost:8200
-#      authentication: token
-#      token: vault_key
-#      kv:
-#        enabled: true
-#        # You will manage the key-value at /secret in the Vault UI
-#        backend: secret
-#        # This is the default context name if spring.application.name is not provided.
-#        # For example, if the client app does not send a specific application name
-#        # Vault will attempt to retrieve the configuration from folder: /secret/application/
-#        default-context: application
-#        # Used to combine context + profile into Vault path to query secret.
-#        # For example if: application name = config-client, profile = dev, profile-separator = '-'
-#        # Then Spring will look for secret at the following paths (in order of priority):
-#        # /secret/config-client-dev
-#        # /secret/config-client
-#        # /secret/application-dev
-#        # /secret/application
-#        profile-separator: '-'
-
+    vault:
+      uri: http://localhost:8200
+      authentication: TOKEN
+      token: ${VAULT_TOKEN}
+      kv:
+        # You will manage the key-value at /secret in the Vault UI
+        backend: secret
+        # Used to combine context + profile into Vault path to query secret.
+        # For example if: application name = config-client, profile = dev, profile-separator = '-'
+        # Then Spring will look for secret at the following paths (in order of priority):
+        # /secret/config-client-dev
+        # /secret/config-client
+        # /secret/application-dev
+        # /secret/application
+        profile-separator: '-'
+        # This is the default context name if spring.application.name is not provided
+        # For example, if the client app does not send a specific application name
+        # Vault will attempt to retrieve the configuration from folder: /secret/application/
+        default-context: application
     config:
       server:
-        git:
-          uri: https://github.com/thoaidc/ars-config-server.git
-          search-paths:
-            - config
-            - config/gateway
-            - config/auth-service
-            - config/discovery-service
-          default-label: main
-          clone-on-start: true
-          timeout: 10
-
-#        vault:
-#          host: 127.0.0.1
-#          port: 8200
-#          authentication: token
-#          token: vault_key
-#          scheme: http
-#          backend: secret
-#          default-key: application
-#          profile-separator: '-'
-#          kv-version: 2
-#          skip-ssl-validation: true
-
         # Specifies which configuration to retrieve from Vault to return to the client
-#        # Only works if spring.cloud.vault config above has successfully connected
-#        vault:
-#          backend: ${spring.cloud.vault.kv.backend}
-#          defaultKey: ${spring.cloud.vault.kv.default-context}
-#          profileSeparator: ${spring.cloud.vault.kv.profile-separator}
-#          kv-version: 2
-#          skip-ssl-validation: true
+        # Only works if spring.cloud.vault config above has successfully connected
+        vault:
+          kv-version: 2 # Using key-value engines version 2
+          token: ${VAULT_TOKEN}
+          backend: secret
+          default-key: application
+          profile-separator: "-"
+          order: -10
+        native:
+          search-locations: file:./configurations/{application}
+
 dct:
   base:
     features:
@@ -138,8 +112,10 @@ dct:
         - /i18n/**
         - /p/**
         - /api/p/**
-        - /gateway/**
         - /application/**
+        - /auth-service/**
+        - /service-discovery/**
+        - /api-gateway/**
 
       jwt:
         enabled: true
