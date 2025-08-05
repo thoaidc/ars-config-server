@@ -31,7 +31,7 @@ spring:
     vault:
       uri: http://localhost:8200
       authentication: TOKEN
-      token: ${VAULT_TOKEN}
+      token: token
       kv:
         # You will manage the key-value at /secret in the Vault UI
         backend: secret
@@ -53,7 +53,7 @@ spring:
         # Only works if spring.cloud.vault config above has successfully connected
         vault:
           kv-version: 2 # Using key-value engines version 2
-          token: ${VAULT_TOKEN}
+          token: token
           backend: secret
           default-key: application
           profile-separator: "-"
