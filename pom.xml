@@ -16,18 +16,20 @@
     </parent>
 
     <properties>
-        <profiles.active>dev,native,vault</profiles.active>
+        <profiles.active>dev,native</profiles.active>
         <main-start-class>com.ars.configserver.ArsConfigServerApplication</main-start-class>
     </properties>
 
     <dependencies>
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>com.dct</groupId>
-            <artifactId>starter-config</artifactId>
+            <artifactId>starter-model</artifactId>
             <version>1.0.0</version>
         </dependency>
 
         <!-- Spring Cloud Config Server -->
+        <!--suppress VulnerableLibrariesLocal -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-config-server</artifactId>
